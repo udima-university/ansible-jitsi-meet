@@ -1,0 +1,41 @@
+---
+- name: Preconfigure Jicofo XMPP user I
+  debconf:
+    name: jicofo
+    question: jicofo/jicofo-authuser
+    vtype: string
+    value: "{{ jicofo_user }}"
+  changed_when: False
+
+- name: Preconfigure Jicofo XMPP user II
+  debconf:
+    name: jicofo
+    question: jicofo/jicofo-authpassword
+    vtype: password
+    value: "{{ jicofo_pass }}"
+  changed_when: False
+
+- name: Preconfigure Jicofo component secret
+  debconf:
+    name: jicofo
+    question: jicofo/jicofosecret
+    vtype: password
+    value: "{{ jicofo_secret }}"
+  changed_when: False
+
+## This is used *too* by jitsi-meet-web-config.postinst
+- name: Preconfigure jitsi-videobridge
+  debconf:
+    name: jitsi-videobridge
+    question: jitsi-videobridge/jvb-hostname
+    vtype: string
+    value: "{{ meet_domain }}"
+
+## And this by /usr/share/jitsi-meet/scripts/install-letsencrypt-cert.sh
+- name: Preconfigure Jitsi Meet I
+  debconf:
+    name: jitsi-meet
+    question: jitsi-meet/jvb-hostname
+    vtype: string
+    value: "{{ meet_domain }}"
+

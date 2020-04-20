@@ -1,0 +1,16 @@
+- name: Add Chrome packaging GPG key
+  apt_key:
+    url: https://dl-ssl.google.com/linux/linux_signing_key.pub
+    state: present
+
+- name: Add Chrome repository
+  apt_repository:
+    repo: "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main"
+    state: present
+    filename: 'local-chrome'
+
+- name: Install Chrome
+  apt:
+    name: google-chrome-stable
+    state: present
+

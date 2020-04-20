@@ -1,0 +1,37 @@
+---
+- name: Install Jitsi Meet Token support
+  apt:
+    pkg: "{{ packages }}"
+    state: present
+    install_recommends: no  # avoid pulling sturn
+  vars:
+    packages:
+      - lua-basexx
+      - lua-cjson
+  tags:
+    - pkginstall
+  notify:
+   - restart prosody
+
+- name: Copy prosody module for token based moderation
+  copy:
+    src: "{{ item }}"
+    dest: /usr/share/jitsi-meet/prosody-plugins/{{ item | basename }}
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - prosody_modules/mod_token_moderation.lua
+  notify:
+   - restart prosody
+
+- name: check if luacrypto is build
+  stat:
+    path: /usr/local/lib/luarocks/rocks/luacrypto/
+  register: luacrypto_dir
+  check_mode: no
+
+## luacrypto (required by luajwtjitsi) build requires old ssl
+- import_tasks: tasks/luacrypto.yml
+  when: luacrypto_dir.stat.exists == False
+

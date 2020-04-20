@@ -1,0 +1,25 @@
+---
+## Try to encode domain/users
+## or use prosodyctl to check if users exist (will complicate looping...)
+- name: Videobridge users
+  shell:
+    cmd: prosodyctl register {{ hostvars[item].videobridge_user }} auth.{{ meet_domain }} {{ hostvars[item].videobridge_pass }}
+    creates: /var/lib/prosody/auth%2e{{ meet_domain | replace(".","%2e") | replace("-","%2d") }}/accounts/{{ hostvars[item].videobridge_user | replace(".","%2e") | replace("-","%2d") | replace("_","%5f") }}.dat
+  with_items: "{{ groups['videobridges'] }}"
+
+- name: Jibri users in auth domain
+  shell:
+    cmd: prosodyctl register {{ hostvars[item].jibri_user }} auth.{{ meet_domain }} {{ hostvars[item].jibri_pass }}
+    creates: /var/lib/prosody/auth%2e{{ meet_domain | replace(".","%2e") | replace("-","%2d") }}/accounts/{{ hostvars[item].jibri_user | replace(".","%2e") | replace("-","%2d") | replace("_","%5f") }}.dat
+  with_items: "{{ groups['jibris'] }}"
+
+- name: Jibri users in recorder domain
+  shell:
+    cmd: prosodyctl register {{ hostvars[item].jibri_user }} recorder.{{ meet_domain }} {{ hostvars[item].jibri_pass }}
+    creates: /var/lib/prosody/recorder%2e{{ meet_domain | replace(".","%2e") | replace("-","%2d") }}/accounts/{{ hostvars[item].jibri_user | replace(".","%2e") | replace("-","%2d") | replace("_","%5f") }}.dat
+  with_items: "{{ groups['jibris'] }}"
+
+- name: Prometheus exporter user
+  shell:
+    cmd: prosodyctl register {{ exporter_xmpp_user }} auth.{{ meet_domain }} {{ exporter_xmpp_pass }}
+    creates: /var/lib/prosody/auth%2e{{ meet_domain | replace(".","%2e") | replace("-","%2d") }}/accounts/{{ exporter_xmpp_user | replace(".","%2e") | replace("-","%2d") | replace("_","%5f") }}.dat

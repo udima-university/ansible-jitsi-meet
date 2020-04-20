@@ -1,0 +1,20 @@
+---
+- name: Main server configuration
+  hosts: central
+  user: root
+  roles:
+  - { role: jitsi-meet, tags: [ 'meet' ] }
+  - { role: jitsi-exporter, when: run_exporter_container, tags: [ 'jitsi-exporter' ] }
+
+- name: Videobridge configuration
+  hosts: videobridges
+  user: root
+  roles:
+  - { role: videobridge, tags: [ 'videobridge' ] }
+
+- name: Jibri configuration
+  hosts: jibris
+  user: root
+  roles:
+  - { role: jibri, tags: [ 'jibri' ] }
+

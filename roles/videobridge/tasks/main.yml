@@ -1,0 +1,65 @@
+---
+- name: Install Java
+  include_role:
+    name: common
+    tasks_from: java
+
+- name: Add jitsi repo
+  include_role:
+    name: common
+    tasks_from: jitsi_repo
+
+# On additional Videobridge installations, 
+# the hostname here is that of the main one
+- name: Preconfigure Videobridge
+  debconf:
+    name: jitsi-videobridge
+    question: jitsi-videobridge/jvb-hostname
+    vtype: string
+    value: "{{ meet_domain }}"
+
+## Parece que ya no se registra como componente
+## Y el user/pass lo sobreescribimos con template
+# - name: Preconfigure Videobridge II
+#   debconf:
+#     name: jitsi-videobridge
+#     question: jitsi-videobridge/jvb-jvbsecret
+#     vtype: password
+#     value: "{{ meet_domain }}"
+
+# tune systemd
+- include: systemd_tuning.yml
+
+- name: Install Videobridge
+  apt:
+    pkg: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+      - jitsi-videobridge2
+
+- name: Configure videobridge I
+  template:
+    src: videobridge_sip-communicator.properties
+    dest: /etc/jitsi/videobridge/sip-communicator.properties
+    owner: jvb
+    group: jitsi
+    mode: 0600
+  tags:
+    - jvbconf
+  notify:
+    - restart jvb
+
+# 644 con una clave... sssstupendo
+- name: Configure videobridge II
+  template:
+    src: config
+    dest: /etc/jitsi/videobridge/config
+    owner: jvb
+    group: jitsi
+    mode: 0644
+  tags:
+    - jvbconf
+  notify:
+    - restart jvb
+

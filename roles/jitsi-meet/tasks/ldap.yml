@@ -1,0 +1,96 @@
+---
+- name: Install build deps
+  apt:
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+      - libsasl2-modules-ldap
+      - sasl2-bin
+      - liblua5.2-dev
+      - libsasl2-dev
+      - libssl-dev
+      - lua-basexx
+      - lua-cjson
+      - lua-ldap
+      - luarocks
+      - git
+      - gcc
+      - patch
+
+- name: Build lua cyrussasl
+  command:
+    cmd: luarocks install cyrussasl 1.1.0-1
+    creates: /usr/local/lib/luarocks/rocks/cyrussasl/
+
+- name: Build lua net-url
+  command:
+    cmd: luarocks install net-url 0.9-1
+    creates: /usr/local/lib/luarocks/rocks/net-url/
+
+- name: check if luacrypto is build
+  stat:
+    path: /usr/local/lib/luarocks/rocks/luacrypto/
+  register: luacrypto_dir
+  check_mode: no
+
+## luacrypto (required by luajwtjitsi) build requires old ssl
+- import_tasks: tasks/luacrypto.yml
+  when: luacrypto_dir.stat.exists == False
+
+- name: Add prosody to sasl group
+  user:
+    name: prosody
+    append: yes
+    groups: sasl
+  notify:
+   - restart prosody
+
+- name: Enable saslauthd
+  lineinfile:
+    path: /etc/default/saslauthd
+    regexp: 'START='
+    line: 'START=yes'
+  notify:
+   - restart saslauthd
+   - restart prosody
+
+- name: Use ldap for saslauthd I
+  lineinfile:
+    path: /etc/default/saslauthd
+    regexp: 'MECHANISMS='
+    line: 'MECHANISMS="ldap"'
+  notify:
+   - restart saslauthd
+   - restart prosody
+
+- name: saslauthd ldap conf
+  template:
+    src: saslauthd.conf
+    dest: /etc/saslauthd.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+   - restart saslauthd
+   - restart prosody
+
+- name: saslauthd xmpp conf I
+  file:
+    state: directory
+    path: /etc/sasl
+    owner: root
+    group: root
+    mode: 0755
+
+- name: saslauthd xmpp conf II
+  template:
+    src: sasl_xmpp.conf
+    dest: /etc/sasl/xmpp.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+   - restart saslauthd
+   - restart prosody
+

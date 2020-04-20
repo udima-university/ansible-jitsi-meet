@@ -1,0 +1,45 @@
+## Todo only when running on buster
+- name: Add stretch repository
+  apt_repository:
+    repo: deb http://deb.debian.org/debian stretch main
+    state: present
+    filename: 'local-stretch'
+
+- name: Install libssl1.0-dev
+  apt:
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+      - libssl1.0.2  # avoid libssl1.0.2 from being removed on -dev purge
+      - libssl1.0-dev
+      - gcc
+      - git
+      - lua-cjson-dev
+      - liblua5.2-dev
+      - luarocks
+
+- name: Build lua luajwtjitsi
+  command:
+    cmd: luarocks install luajwtjitsi
+    creates: /usr/local/lib/luarocks/rocks/luajwtjitsi
+  notify:
+    - restart prosody
+
+# TODO eewww
+- name: Remove locally created lua-cjson, breaks prosody
+  file:
+    path: /usr/local/lib/lua/5.2/cjson.so
+    state: absent
+
+- name: Remove stretch repository
+  apt_repository:
+    repo: deb http://deb.debian.org/debian stretch main
+    state: absent
+    filename: 'local-stretch'
+
+- name: Restore libssl-dev
+  apt:
+    name: libssl-dev
+    state: present
+

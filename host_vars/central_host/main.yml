@@ -1,0 +1,43 @@
+---
+## Note
+# Do not use chars other than [a-zA-Z0-9._-] for usernames
+# prosody likes to encode chars other than alphanumerics in files/dirs names
+
+# Meet
+# Limit the number of videostreams to clients (-1 -> no limit)
+channelLastN: -1
+defaultLanguage: en
+
+# Jicofo
+jicofo_user: focus  # DO NOT change this, ignored by jicofo postinst, hardcoded god knows where else
+jicofo_pass: "{{ vault_jicofo_pass }}"
+# Jicofo Component secret (debconf: jicofo/jicofosecret
+jicofo_secret: "{{ vault_jicofo_secret }}"
+
+##
+## Optional components
+##
+
+## if token auth enabled
+token_auth_appid: YOUR_APP_ID
+token_auth_appsecret: "{{ vault_token_auth_appsecret }}"
+
+## prometheus jvb exporter (installs docker and runs a container for it)
+run_exporter_container: false
+exporter_xmpp_user: prometheus
+exporter_xmpp_pass: "{{ vault_exporter_xmpp_pass }}"
+
+## Videobridge XMPP credetials (if running jvb in this host)
+videobridge_user: jvb_CHANGEME
+videobridge_pass: "{{ vault_videobridge_pass }}"
+# Set this to something different that "videobridge_user" if you want to share
+# videobridge_user and videobridge_pass across different videobridges
+videobridge_muc_nick: jvb_CHANGEME
+
+## Jibri XMPP credetials (if running jibri in this host)
+jibri_user: jvb_CHANGEME
+jibri_pass: "{{ vault_jibri_pass }}"
+# Set this to something different that "videobridge_user" if you want to share
+# videobridge_user and videobridge_pass across different videobridges
+jibri_muc_nick: jvb_CHANGEME
+

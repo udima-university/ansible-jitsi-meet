@@ -1,0 +1,27 @@
+---
+- name: Install certbot
+  apt:
+    pkg: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+      - certbot
+      - python3-certbot-nginx
+
+- name: Ask for a LE certificate
+  command:
+    cmd: certbot --nginx -d {{ meet_domain }} --agree-tos -m {{ le_email }} -n
+    creates: /etc/letsencrypt/live/{{ meet_domain }}/privkey.pem
+
+- name: Check if there's cerbot config in nginx
+  shell:
+    cmd: grep -q Certbot /etc/nginx/sites-enabled/default
+  register: certbot_entries
+  check_mode: no
+  failed_when: false
+  changed_when: false
+
+- name: Clean nginx conf from LE entries
+  command: certbot --nginx rollback
+  when: certbot_entries.rc == 0
+  notify: reload nginx

@@ -1,0 +1,34 @@
+---
+- name: systemd reload
+  command: systemctl daemon-reload
+
+- name: restart saslauthd
+  service:
+    name: saslauthd
+    state: restarted
+
+- name: restart prosody
+  service:
+    name: prosody
+    state: restarted
+
+- name: restart jicofo
+  service:
+    name: jicofo
+    state: restarted
+
+- name: restart jvb
+  service:
+    name: jitsi-videobridge
+    state: restarted
+
+- name: restart nginx
+  service:
+    name: nginx
+    state: restarted
+
+
+- name: reload nginx
+  service:
+    name: nginx
+    state: reloaded

@@ -1,0 +1,111 @@
+---
+- name: Install Java
+  include_role:
+    name: common
+    tasks_from: java
+
+- name: Add jitsi repo
+  include_role:
+    name: common
+    tasks_from: jitsi_repo
+
+##
+## WARNING: debian kernel required in cloud/vps servers.
+##          alsa loop kernel module is needed
+##
+- name: Install required utils
+  apt:
+    name: "{{ packages }}"
+    state: present
+    update_cache: yes
+  vars:
+    packages:
+      - wget
+      - linux-image-amd64
+
+# tune systemd TODO needed in jibri?
+- include: systemd_tuning.yml
+
+- name: Install Jibri
+  apt:
+    pkg: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+      - jibri
+
+- name: check if chrome is installed
+  stat:
+    path: /usr/bin/google-chrome-stable
+  register: chrome
+  check_mode: no
+
+- import_tasks: tasks/chrome.yml
+  when: chrome.stat.exists == False
+
+- name: Chromedriver install script
+  template:
+    src: install_chrome_driver
+    dest: /usr/local/bin/install_chrome_driver
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Install chromedriver
+  shell:
+    cmd: /usr/local/bin/install_chrome_driver
+    creates: /usr/bin/chromedriver
+
+- name: Load alsa loop on boot
+  lineinfile:
+    path: /etc/modules
+    regexp: snd-aloop
+    line: snd-aloop
+
+- name: Load snd-aloop or fail because of an invalid kernel
+  command:
+    cmd: modprobe snd-aloop
+  changed_when: False
+
+## Not using recourse: yes to avoid changing managed_policies.json perms
+- name: Create chrome policies dir
+  file:
+    state: directory
+    path: "{{ item }}"
+    owner: root
+    group: root
+    mode: 0755
+  with_items:
+    - /etc/opt
+    - /etc/opt/chrome
+    - /etc/opt/chrome/policies
+    - /etc/opt/chrome/policies/managed
+
+
+- name: Chrome policies
+  template:
+    src: managed_policies.json
+    dest: /etc/opt/chrome/policies/managed/managed_policies.json
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Jibri configuration
+  template:
+    src: config.json
+    dest: /etc/jitsi/jibri/config.json
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart jibri
+
+- name: Enable and start services
+  service:
+    name: "{{ item }}"
+    enabled: yes
+    state: started
+  with_items:
+    - jibri-xorg.service
+    - jibri-icewm.service
+    - jibri.service

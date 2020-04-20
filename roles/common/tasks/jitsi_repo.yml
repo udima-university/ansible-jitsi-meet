@@ -1,0 +1,15 @@
+---
+- name: Add Jitsi packaging GPG key
+  apt_key:
+    url: https://download.jitsi.org/jitsi-key.gpg.key
+    state: present
+  tags:
+    - jitsirepo
+
+- name: Add Jitsi repository
+  apt_repository:
+    repo: deb https://download.jitsi.org stable/
+    state: present
+    filename: 'local-jitsi'
+  tags:
+    - jitsirepo

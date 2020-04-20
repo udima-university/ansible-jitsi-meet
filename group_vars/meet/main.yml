@@ -1,0 +1,24 @@
+---
+## Domain name for the installation
+meet_domain: meet.MYDOMAIN.TLD
+
+# Mail for let's encrypt certs
+le_email: YOU@MYDOMAIN.TLD
+# Use debian's certbot
+debian_certbot: true
+# Auth (none, ldap, token)
+xmpp_auth: none
+# Allow guest users (when using auth)
+allow_guests: false
+
+# appsecret for token based auth (when using token auth)
+token_auth_appsecret: "{{ vault_token_auth_appsecret }}"
+
+## LDAP configuration for saslauthd
+saslauthd_ldap_config: |
+  ldap_servers: ldap://127.0.0.1/
+  ldap_search_base: ou=PEOPLE,dc=YOURDOMAIN,dc=ES
+  ldap_filter: (uid=%u)
+  ldap_version: 3
+  ldap_auth_method: bind
+

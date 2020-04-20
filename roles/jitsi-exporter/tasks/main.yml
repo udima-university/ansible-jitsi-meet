@@ -1,0 +1,42 @@
+- name: Install docker
+  apt:
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+      - docker.io
+      - python-docker
+
+- name: Run jvb-exporter
+  docker_container:
+    name: jvb-exporter
+    image: karrieretutor/jitsi:prom-exporter-latest
+    state: started
+    ports:
+      - 9102:8080
+    env:
+      XMPP_USER: "{{ exporter_xmpp_user }}"
+      XMPP_PW: "{{ exporter_xmpp_pass }}"
+      XMPP_AUTH_DOMAIN: auth.{{ meet_domain }}
+      XMPP_SERVER: 172.17.0.1
+      JVB_BREWERY_MUC: JvbBrewery
+      XMPP_INTERNAL_MUC_DOMAIN: internal.auth.{{ meet_domain }}
+
+- name: Copy service file
+  template:
+    src: "{{ item }}"
+    dest: /etc/systemd/system/{{ item }}
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - docker-jvb-exporter.service
+
+- name: Enable service files
+  systemd:
+    name: "{{ item }}"
+    daemon_reload: yes
+    enabled: yes
+    state: started
+  with_items:
+    - docker-jvb-exporter.service

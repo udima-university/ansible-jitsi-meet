@@ -1,0 +1,28 @@
+---
+# videobridge does not work fine with openjdk-11 :-(
+# TODO: re-test in the future
+- name: check if openjdk-8 is installed
+  stat:
+    path: /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+  register: java8
+  check_mode: no
+
+- name: Add stretch repository
+  apt_repository:
+    repo: deb http://deb.debian.org/debian stretch main
+    state: present
+    filename: 'local-stretch'
+  when: java8.stat.exists == False
+
+- name: Install openjdk-8-jre-headless
+  apt:
+    name: openjdk-8-jre-headless
+    state: present
+  when: java8.stat.exists == False
+
+- name: Disable stretch repository
+  apt_repository:
+    repo: deb http://deb.debian.org/debian stretch main
+    state: absent
+    filename: 'local-stretch'
+  when: java8.stat.exists == False
