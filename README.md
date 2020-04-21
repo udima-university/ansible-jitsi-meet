@@ -9,6 +9,7 @@ or Ubuntu, but it has not been tested there.
 Simple clone it and rename the host configuration directories in *hosts_vars/*
 to match your hosts.
 Also edit *group_vars/meet* and the *hosts* file to suit your needs.
+Further instructions in [USAGE.md](USAGE.md).
 If you're using a git repository to hold your configuration, don't forget to
 use **ansible-vault** to encrypt sensitive information. That's why the passwords
 are stored on 0secret.yml files.
@@ -58,24 +59,6 @@ For example, on Google Cloud instances, you need to run:
     reboot
 
 After that, you may run the playbook.
-
-## Adding new servers to your setup
-
-If, at a later time, you want to add more videobridge or jibri servers, just
-add their configuration to *hosts_vars* and run the playbook with the "jibri"
-or "videobridge" tags. Also, if they will be using their own XMPP user/password,
-run the playbook with the "xmppusers" tag so that the credentials get created
-in prosody.
-
-To add a new videobridge:
-
-    ansible-playbook -i hosts site.yml --tags xmppusers
-    ansible-playbook -i hosts site.yml --tags videobridge
-
-To add a new jibri server:
-
-    ansible-playbook -i hosts site.yml --tags xmppusers
-    ansible-playbook -i hosts site.yml --tags jibri
 
 ## Final notes
 
