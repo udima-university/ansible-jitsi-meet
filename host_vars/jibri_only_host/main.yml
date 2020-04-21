@@ -4,9 +4,9 @@
 # prosody likes to encode chars other than alphanumerics in files/dirs names
 
 ## Jibri XMPP credetials
-jibri_user: jvb_CHANGEME
+jibri_user: jibri_CHANGEME
 jibri_pass: "{{ vault_jibri_pass }}"
 # Set this to something different that "videobridge_user" if you want to share
 # videobridge_user and videobridge_pass across different videobridges
-jibri_muc_nick: jvb_CHANGEME
+jibri_muc_nick: jibri_CHANGEME
 
