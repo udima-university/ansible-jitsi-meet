@@ -11,7 +11,8 @@ xmpp_auth: none
 # Allow guest users (when using auth)
 allow_guests: false
 
-# appsecret for token based auth (when using token auth)
+# token configuration
+token_auth_appid: YOUR_APP_ID
 token_auth_appsecret: "{{ vault_token_auth_appsecret }}"
 
 ## LDAP configuration for saslauthd

@@ -18,10 +18,6 @@ jicofo_secret: "{{ vault_jicofo_secret }}"
 ## Optional components
 ##
 
-## if token auth enabled
-token_auth_appid: YOUR_APP_ID
-token_auth_appsecret: "{{ vault_token_auth_appsecret }}"
-
 ## prometheus jvb exporter (installs docker and runs a container for it)
 run_exporter_container: false
 exporter_xmpp_user: prometheus
