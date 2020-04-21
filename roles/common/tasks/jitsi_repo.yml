@@ -5,6 +5,15 @@
     state: present
   tags:
     - jitsirepo
+  when: not use_included_jitsi_gpg_key
+
+- name: Add Jitsi packaging local GPG key
+  apt_key:
+    data: "{{ lookup('file', 'jitsi-key.gpg.key') }}"
+    state: present
+  tags:
+    - jitsirepo
+  when: use_included_jitsi_gpg_key
 
 - name: Add Jitsi repository
   apt_repository:

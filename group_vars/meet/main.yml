@@ -22,3 +22,6 @@ saslauthd_ldap_config: |
   ldap_version: 3
   ldap_auth_method: bind
 
+## This shouldn't be necessary,...
+## but sometimes download.jitsi.org is not fast enough for apt_key
+use_included_jitsi_gpg_key: false
