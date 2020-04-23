@@ -12,7 +12,7 @@ Also edit *group_vars/meet* and the *hosts* file to suit your needs.
 Further instructions in [USAGE.md](USAGE.md).
 If you're using a git repository to hold your configuration, don't forget to
 use **ansible-vault** to encrypt sensitive information. That's why the passwords
-are stored on 0secret.yml files.
+are stored on *0secret.yml* files.
 
 You may run everything on one host. Or have separate hosts for videobridges and
 jibris. If you want to run a videobridge and/or a jibri instance on the central
@@ -43,6 +43,7 @@ Both token and LDAP authentication can also allow non-authenticated users in
 
 You may switch from one authentication scheme to another by editing the file
 previously mentioned and running:
+
     ansible-playbook -i hosts site.yml --tags authconf
 
 ## What are the system requirements for running ~~Jitsi Meet~~ a jibri instance?
