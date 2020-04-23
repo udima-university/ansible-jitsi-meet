@@ -16,9 +16,9 @@ authenticated one created a room, by setting *allow_guests* to "true".
    servers involved. If you'd rather use a different user with *sudo*, edit
    *site.yml* and change the occurrences of `user: root` with:
 
-    become: yes
-    become_user: root
-    become_method: sudo
+        become: yes
+        become_user: root
+        become_method: sudo
 
 ## Single node deployment
 
@@ -39,7 +39,7 @@ authenticated one created a room, by setting *allow_guests* to "true".
    git.
 10. Run the playbook, and enjoy (if everything worked as expected):
 
-    ansible-playbook -i hosts site.yml
+        ansible-playbook -i hosts site.yml
 
 ## Multiple node deployment (several videobridges and/or jibri instances)
 
@@ -60,7 +60,7 @@ authenticated one created a room, by setting *allow_guests* to "true".
    the latter with **ansible-vault** if you plan to keep them in a repository.
 8. Run the playbook, and enjoy (if everything worked as expected):
 
-    ansible-playbook -i hosts site.yml
+       ansible-playbook -i hosts site.yml
 
 ## Adding new servers to your setup
 
