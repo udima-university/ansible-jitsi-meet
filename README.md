@@ -4,6 +4,8 @@ This playbook will install the Jitsi Meet stack in one or more servers.  It is
 developed and tested on Debian 10 Buster. It may work on other Debian releases
 or Ubuntu, but it has not been tested there.
 
+Before using it you may want to read a bit about Jitsi Meet's arquitecture [here](https://docs.easyjitsi.com/docs/architecture) or [here](https://github.com/jitsi/jitsi-meet/blob/master/doc/scalable-installation.md) or [aquí (in Spanish)](https://blog.inittab.org/administracion-sistemas/instalar-un-servidor-de-videoconferencia-libre-jitsi-meet-i-la-teoria/)
+
 ## How do I use it?
 
 Simple clone it and rename the host configuration directories in *hosts_vars/*
