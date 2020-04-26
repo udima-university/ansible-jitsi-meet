@@ -36,7 +36,7 @@
             "control_muc": {
                 "domain": "internal.auth.{{ meet_domain }}",
                 "room_name": "JibriBrewery",
-                "nickname": "{{ jibri_nick }}"
+                "nickname": "{{ jibri_muc_nick }}"
             },
             // All participants in a call join a muc so they can exchange
             //  information.  Jibri can be instructed to join a special muc
