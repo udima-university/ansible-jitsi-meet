@@ -19,7 +19,7 @@
       XMPP_PW: "{{ exporter_xmpp_pass }}"
       XMPP_AUTH_DOMAIN: auth.{{ meet_domain }}
       XMPP_SERVER: 172.17.0.1
-      JVB_BREWERY_MUC: JvbBrewery
+      JVB_BREWERY_MUC: jvbbrewery
       XMPP_INTERNAL_MUC_DOMAIN: internal.auth.{{ meet_domain }}
 
 - name: Copy service file
