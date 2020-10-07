@@ -28,11 +28,11 @@ VirtualHost "{{ meet_domain }}"
         app_id="{{ token_auth_appid }}"
         app_secret="{{ token_auth_appsecret }}"
         allow_empty_token = false
-	allow_unencrypted_plain_auth = true
+        allow_unencrypted_plain_auth = true
 {% elif xmpp_auth == "ldap" %}
         authentication = "cyrus"
-	cyrus_application_name = "xmpp"
-	allow_unencrypted_plain_auth = true
+        cyrus_application_name = "xmpp"
+        allow_unencrypted_plain_auth = true
 {% else %}
         authentication = "anonymous"
 {% endif %}
