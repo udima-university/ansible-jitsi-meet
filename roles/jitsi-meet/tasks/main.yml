@@ -130,6 +130,18 @@
     - jicofoconf
     - authconf
 
+- name: Jicofo config III
+  template:
+    src: jicofo.conf
+    dest: /etc/jitsi/jicofo/jicofo.conf
+    owner: jicofo
+    group: jitsi
+    mode: 0644
+  notify:
+   - restart jicofo
+  tags:
+    - jicofoconf
+
 - name: Nginx virtualhost config
   template:
     src: nginx.conf
