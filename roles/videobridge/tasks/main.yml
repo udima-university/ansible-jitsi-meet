@@ -53,11 +53,14 @@
 # 644 con una clave... sssstupendo
 - name: Configure videobridge II
   template:
-    src: config
-    dest: /etc/jitsi/videobridge/config
+    src: "{{ item }}"
+    dest: /etc/jitsi/videobridge/{{ item }}
     owner: jvb
     group: jitsi
     mode: 0644
+  with_items:
+    - config
+    - jvb.conf
   tags:
     - jvbconf
   notify:
