@@ -58,11 +58,17 @@ VirtualHost "{{ meet_domain }}"
             "speakerstats";
             "turncredentials";
             "conference_duration";
+            "muc_lobby_rooms";
 {% if xmpp_auth == "ldap" %}
 	    "auth_cyrus";
 {% endif %}
         }
         c2s_require_encryption = false
+        lobby_muc = "lobby.{{ meet_domain }}"
+        main_muc = "conference.{{ meet_domain }}"
+{% if groups['jibris'] | length > 0 %}
+        muc_lobby_whitelist = { "recorder.{{ meet_domain }}" } -- Here we can whitelist jibri to enter lobby enabled rooms
+{% endif %}
 
 {% if allow_guests %}
 VirtualHost "guest.{{ meet_domain }}"
@@ -117,3 +123,9 @@ Component "speakerstats.{{ meet_domain }}" "speakerstats_component"
 
 Component "conferenceduration.{{ meet_domain }}" "conference_duration_component"
     muc_component = "conference.{{ meet_domain }}"
+
+Component "lobby.{{ meet_domain }}" "muc"
+    storage = "memory"
+    restrict_room_creation = true
+    muc_room_locking = false
+    muc_room_default_public_jids = true
