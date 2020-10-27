@@ -80,3 +80,11 @@ To add a new jibri server:
     ansible-playbook -i hosts site.yml --tags xmppusers
     ansible-playbook -i hosts site.yml --tags jibri
 
+## Jibri recording (and upload to a storage of your choice)
+
+If you want to store your meetings' recordings, edit *group_vars/meet/main.yml*
+to enable recording and point *recording_processing_script* to a script that
+will receive, as a single argument, the path to the directory containing a
+".mp4" file and a metadata.json file. You may use rclone
+[rclone](https://rclone.org/) in the script to upload the files to Google
+Drive, Dropbox or any other backend supported.

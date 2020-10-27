@@ -81,6 +81,18 @@
   tags:
     - authconf
 
+- name: Add presence_idendity when storing participants metadata in recordings
+  file:
+    state: link
+    src: /usr/share/jitsi-meet/prosody-plugins/mod_presence_identity.lua
+    dest: /usr/lib/prosody/modules/mod_presence_identity.lua
+    owner: root
+    group: root
+  notify:
+   - restart prosody
+  tags:
+    - prosodyconf
+
 - name: Prosody domain conf
   template:
     src: prosody_domain.cfg.lua

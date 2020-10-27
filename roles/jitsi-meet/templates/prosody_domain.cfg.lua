@@ -62,6 +62,9 @@ VirtualHost "{{ meet_domain }}"
 {% if xmpp_auth == "ldap" %}
 	    "auth_cyrus";
 {% endif %}
+{% if enable_recording and add_participants_metadata  %}
+            "presence_identity";
+{% endif %}
         }
         c2s_require_encryption = false
         lobby_muc = "lobby.{{ meet_domain }}"

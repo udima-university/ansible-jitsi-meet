@@ -192,7 +192,7 @@ var config = {
     // Recording
 
     // Whether to enable file recording or not.
-    // fileRecordingsEnabled: false,
+    fileRecordingsEnabled: {{ enable_recording | lower }},
     // Enable the dropbox integration.
     // dropbox: {
     //     appKey: '<APP_KEY>' // Specify your app key here.
@@ -210,7 +210,7 @@ var config = {
     // Whether to show the possibility to share file recording with other people
     // (e.g. meeting participants), based on the actual implementation
     // on the backend.
-    // fileRecordingsServiceSharingEnabled: false,
+    fileRecordingsServiceSharingEnabled: {{ add_participants_metadata | lower }},
 
     // Whether to enable live streaming or not.
 {% if groups['jibris'] | length > 0 %}

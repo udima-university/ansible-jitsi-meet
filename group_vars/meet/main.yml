@@ -26,3 +26,10 @@ saslauthd_ldap_config: |
 ## This shouldn't be necessary,...
 ## but sometimes download.jitsi.org is not fast enough for apt_key
 use_included_jitsi_gpg_key: false
+
+## Recording
+enable_recording: false
+add_participants_metadata: false
+recording_directory: /home/jibri/recs
+# Script to execute after recording is finished
+recording_processing_script: /dev/null
