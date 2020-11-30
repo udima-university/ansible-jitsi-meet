@@ -4,6 +4,27 @@
     repo: deb http://deb.debian.org/debian stretch main
     state: present
     filename: 'local-stretch'
+  when: ansible_distribution != 'Ubuntu'
+
+- name: Add bionic repository
+  apt_repository:
+    repo: deb http://security.ubuntu.com/ubuntu bionic-security main
+    state: present
+    filename: 'local-bionic'
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '20.04'
+
+- name: Install packages for luacrypto
+  apt:
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+      - libssl1.0-dev
+      - gcc
+      - git
+      - lua-cjson-dev
+      - liblua5.2-dev
+      - luarocks
 
 - name: Install libssl1.0-dev
   apt:
@@ -12,12 +33,7 @@
   vars:
     packages:
       - libssl1.0.2  # avoid libssl1.0.2 from being removed on -dev purge
-      - libssl1.0-dev
-      - gcc
-      - git
-      - lua-cjson-dev
-      - liblua5.2-dev
-      - luarocks
+  when: ansible_distribution != 'Ubuntu'
 
 - name: Build lua luajwtjitsi
   command:
@@ -37,6 +53,14 @@
     repo: deb http://deb.debian.org/debian stretch main
     state: absent
     filename: 'local-stretch'
+  when: ansible_distribution != 'Ubuntu'
+
+- name: Remove bionic repository
+  apt_repository:
+    repo: deb http://security.ubuntu.com/ubuntu bionic-security main
+    state: absent
+    filename: 'local-bionic'
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '20.04'
 
 - name: Restore libssl-dev
   apt:
