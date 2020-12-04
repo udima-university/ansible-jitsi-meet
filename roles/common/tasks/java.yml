@@ -12,7 +12,7 @@
     repo: deb http://deb.debian.org/debian stretch main
     state: present
     filename: 'local-stretch'
-  when: java8.stat.exists == False
+  when: java8.stat.exists == False  and ansible_distribution != 'Ubuntu'
 
 - name: Install openjdk-8-jre-headless
   apt:
@@ -25,4 +25,4 @@
     repo: deb http://deb.debian.org/debian stretch main
     state: absent
     filename: 'local-stretch'
-  when: java8.stat.exists == False
+  when: java8.stat.exists == False  and ansible_distribution != 'Ubuntu'
