@@ -9,3 +9,13 @@ videobridge_pass: "{{ vault_videobridge_pass }}"
 # Set this to something different that "videobridge_user" if you want to share
 # videobridge_user and videobridge_pass across different videobridges
 videobridge_muc_nick: jvb_CHANGEME
+
+## octo configuration (optional)
+# octo_region: some_region
+## bind_address is only required if not using the IP address asociated
+## with the default route (as in "the default IP address")
+# octo_bind_address:
+## public_address is only required if the bind IP address is not reachable
+## by the rest of the videobridges. Usually when bind_address is in a private
+## network and there's some kind of NAT from this IP address to the bind_address
+# octo_public_address:

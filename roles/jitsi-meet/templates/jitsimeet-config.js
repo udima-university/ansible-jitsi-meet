@@ -47,6 +47,11 @@ var config = {
     //
 
     testing: {
+{% if octo_enabled is defined and octo_enabled %}
+      octo: {
+        probability: 1
+      },
+{% endif %}
         // Disables the End to End Encryption feature. Useful for debugging
         // issues related to insertable streams.
         // disableE2EE: false,

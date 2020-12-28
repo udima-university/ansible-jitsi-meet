@@ -33,3 +33,12 @@ add_participants_metadata: false
 recording_directory: /home/jibri/recs
 # Script to execute after recording is finished
 recording_processing_script: /dev/null
+
+## octo support
+octo_enabled: true
+# strategy: either RegionBasedBridgeSelectionStrategy or SplitBridgeSelectionStrategy
+octo_strategy: RegionBasedBridgeSelectionStrategy
+# default port for octo networking
+octo_bind_port: 4096
+# default region for those videobridges not having one set
+octo_region: none
