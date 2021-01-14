@@ -35,7 +35,7 @@ recording_directory: /home/jibri/recs
 recording_processing_script: /dev/null
 
 ## octo support
-octo_enabled: true
+octo_enabled: false
 # strategy: either RegionBasedBridgeSelectionStrategy or SplitBridgeSelectionStrategy
 octo_strategy: RegionBasedBridgeSelectionStrategy
 # default port for octo networking
