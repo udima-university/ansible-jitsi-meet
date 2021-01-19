@@ -1,0 +1,50 @@
+---
+- name: Install coturn
+  apt:
+    pkg: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+      - jitsi-meet-turnserver
+
+## TODO this will NOT work if installing turn server on a different one that the central server
+- name: Copy hook script to make ssl cert accessible by coturn
+  command: cp /usr/share/jitsi-meet-turnserver/coturn-certbot-deploy.sh /etc/letsencrypt/renewal-hooks/deploy/coturn-certbot-deploy.sh
+  args:
+    creates: /etc/letsencrypt/renewal-hooks/deploy/coturn-certbot-deploy.sh
+
+- name: Fix perms for hook script
+  file:
+    path: /etc/letsencrypt/renewal-hooks/deploy/coturn-certbot-deploy.sh
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Fix domain name in hook script
+  lineinfile:
+    path: /etc/letsencrypt/renewal-hooks/deploy/coturn-certbot-deploy.sh
+    state: present
+    regexp: '^ *jitsi-meet.example.com\)'
+    line: '        jitsidev03.udima.es)'
+
+- name: Execute hook script on first run
+  command:  /etc/letsencrypt/renewal-hooks/deploy/coturn-certbot-deploy.sh
+  environment:
+    RENEWED_DOMAINS: "{{ meet_domain }}"
+    RENEWED_LINEAGE: /etc/letsencrypt/live/{{ meet_domain }}
+  args:
+    creates: /etc/coturn/certs/{{ meet_domain }}.privkey.pem
+
+# TODO force cert renewall after hook script installed
+
+- name: Turn server configuration
+  template:
+    src: turnserver.conf
+    dest: /etc/turnserver.conf
+    owner: root
+    group: turnserver
+    mode: 0640
+  notify:
+   - restart coturn
+  tags:
+    - turnconf

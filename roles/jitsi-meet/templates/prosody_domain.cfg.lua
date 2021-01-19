@@ -3,13 +3,13 @@ plugin_paths = { "/usr/share/jitsi-meet/prosody-plugins/" }
 -- domain mapper options, must at least have domain base set to use the mapper
 muc_mapper_domain_base = "{{ meet_domain }}";
 
-turncredentials_secret = "__turnSecret__";
+{% if turn_enabled is defined and turn_enabled %}
+turncredentials_secret = "{{ turn_secret }}";
 
 turncredentials = {
-  { type = "stun", host = "{{ meet_domain }}", port = "443" },
-  { type = "turn", host = "{{ meet_domain }}", port = "443", transport = "udp" },
-  { type = "turns", host = "{{ meet_domain }}", port = "443", transport = "tcp" }
+  { type = "turns", host = "{{ meet_domain }}", port = "5349", transport = "tcp" }
 };
+{% endif %}
 
 cross_domain_bosh = false;
 consider_bosh_secure = true;
@@ -56,7 +56,11 @@ VirtualHost "{{ meet_domain }}"
             "pubsub";
             "ping"; -- Enable mod_ping
             "speakerstats";
+{% if turn_enabled is defined and turn_enabled %}
             "turncredentials";
+{% else %}
+            -- "turncredentials";
+{% endif %}
             "conference_duration";
             "muc_lobby_rooms";
 {% if xmpp_auth == "ldap" %}

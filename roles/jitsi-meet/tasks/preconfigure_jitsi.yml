@@ -39,3 +39,12 @@
     vtype: string
     value: "{{ meet_domain }}"
 
+## Used by jitsi-meet-turnserver
+- name: turn server secret
+  debconf:
+    name: jitsi-meet-prosody
+    question: jitsi-meet-prosody/turn-secret
+    vtype: password
+    value: "{{ turn_secret }}"
+  when: turn_enabled is defined and turn_enabled
+

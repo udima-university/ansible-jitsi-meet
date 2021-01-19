@@ -42,3 +42,9 @@ octo_strategy: RegionBasedBridgeSelectionStrategy
 octo_bind_port: 4096
 # default region for those videobridges not having one set
 octo_region: none
+
+## turn support
+## TODO: Currently TURN server support is limited to running it only on the "central" server
+##       next to nginx, prosody and jicofo, and sharing SSL certificate with them
+turn_enabled: false
+turn_secret: "{{ vault_turn_secret }}"
