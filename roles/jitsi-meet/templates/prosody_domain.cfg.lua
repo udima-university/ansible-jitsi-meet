@@ -122,7 +122,8 @@ VirtualHost "recorder.{{ meet_domain }}"
     authentication = "internal_plain"
 
 {% endif %}
-Component "focus.{{ meet_domain }}"
+Component "focus.{{ meet_domain }}" "client_proxy"
+    target_address = "focus@auth.{{ meet_domain }}"
     component_secret = "{{ jicofo_secret }}"
 
 Component "speakerstats.{{ meet_domain }}" "speakerstats_component"
