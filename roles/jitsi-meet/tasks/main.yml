@@ -128,19 +128,19 @@
    - restart jicofo
   tags:
     - jicofoconf
-
-- name: Jicofo config II
-  template:
-    src: jicofo_sip-communicator.properties
-    dest: /etc/jitsi/jicofo/sip-communicator.properties
-    owner: jicofo
-    group: jitsi
-    mode: 0600
-  notify:
-   - restart jicofo
-  tags:
-    - jicofoconf
-    - authconf
+# DEPRECATED
+# - name: Jicofo config II
+#   template:
+#     src: jicofo_sip-communicator.properties
+#     dest: /etc/jitsi/jicofo/sip-communicator.properties
+#     owner: jicofo
+#     group: jitsi
+#     mode: 0600
+#   notify:
+#    - restart jicofo
+#   tags:
+#     - jicofoconf
+#     - authconf
 
 - name: Jicofo config III
   template:
@@ -153,6 +153,7 @@
    - restart jicofo
   tags:
     - jicofoconf
+    - authconf
 
 - name: Nginx virtualhost config
   template:
