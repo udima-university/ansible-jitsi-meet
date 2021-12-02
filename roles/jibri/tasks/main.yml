@@ -90,13 +90,33 @@
     group: root
     mode: 0644
 
+## Save old config
+- name: Check old configuration exists
+  stat:
+    path: /etc/jitsi/jibri/config.json
+  register: configjson
+  tags:
+    - jibriconf
+
+- name: Rename old config
+  command:
+    cmd: mv /etc/jitsi/jibri/config.json /etc/jitsi/jibri/config.json.old
+    creates: /etc/jitsi/jibri/config.json.old
+  when: configjson.stat.exists
+  tags:
+    - jibriconf
+  notify:
+    - restart jibri
+
 - name: Jibri configuration
   template:
-    src: config.json
-    dest: /etc/jitsi/jibri/config.json
+    src: jibri.conf
+    dest: /etc/jitsi/jibri/jibri.conf
     owner: root
     group: root
     mode: 0644
+  tags:
+    - jibriconf
   notify:
     - restart jibri
 
