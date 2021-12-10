@@ -25,7 +25,7 @@
     path: /etc/letsencrypt/renewal-hooks/deploy/coturn-certbot-deploy.sh
     state: present
     regexp: '^ *jitsi-meet.example.com\)'
-    line: '        jitsidev03.udima.es)'
+    line: "        {{ meet_domain }})"
 
 - name: Execute hook script on first run
   command:  /etc/letsencrypt/renewal-hooks/deploy/coturn-certbot-deploy.sh
