@@ -21,6 +21,13 @@ ssl = {
   ciphers = "ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384"
 }
 
+unlimited_jids = {
+    {% for item in groups['videobridges'] %}
+    "{{ hostvars[item].videobridge_user }}@auth.{{ meet_domain }}",
+    {% endfor %}
+    "focus@auth.{{ meet_domain }}"
+}
+
 VirtualHost "{{ meet_domain }}"
         -- enabled = false -- Remove this line to enable this host
 {% if xmpp_auth == "token" %}
@@ -84,6 +91,7 @@ VirtualHost "guest.{{ meet_domain }}"
 
 {% endif %}
 Component "conference.{{ meet_domain }}" "muc"
+    restrict_room_creation = true
     storage = "memory"
     modules_enabled = {
         "muc_meeting_id";
@@ -103,11 +111,16 @@ Component "internal.auth.{{ meet_domain }}" "muc"
     modules_enabled = {
       "ping";
     }
-    admins = { "{{ jicofo_user }}@auth.{{ meet_domain }}" }
+    admins = { 
+    {% for item in groups['videobridges'] %}
+        "{{ hostvars[item].videobridge_user }}@auth.{{ meet_domain }}",
+    {% endfor %}
+        "{{ jicofo_user }}@auth.{{ meet_domain }}" }
     muc_room_locking = false
     muc_room_default_public_jids = true
 
 VirtualHost "auth.{{ meet_domain }}"
+    modules_enabled = { "limits_exception"; }
     ssl = {
         key = "/etc/prosody/certs/auth.{{ meet_domain }}.key";
         certificate = "/etc/prosody/certs/auth.{{ meet_domain }}.crt";
