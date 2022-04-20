@@ -5,18 +5,18 @@
   vars:
     packages:
       - docker.io
-      - python-docker
+      - python3-docker
 
 - name: Run jvb-exporter
   docker_container:
     name: jvb-exporter
-    image: karrieretutor/jitsi:prom-exporter-latest
+    image: goacid/jitsi-prom-exporter
     state: started
     ports:
       - 9102:8080
     env:
-      XMPP_USER: "{{ exporter_xmpp_user }}"
-      XMPP_PW: "{{ exporter_xmpp_pass }}"
+      PROMEXP_AUTH_USER: "{{ exporter_xmpp_user }}"
+      PROMEXP_AUTH_PASSWORD: "{{ exporter_xmpp_pass }}"
       XMPP_AUTH_DOMAIN: auth.{{ meet_domain }}
       XMPP_SERVER: 172.17.0.1
       JVB_BREWERY_MUC: jvbbrewery
