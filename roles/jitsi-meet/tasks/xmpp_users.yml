@@ -1,6 +1,11 @@
 ---
 ## Try to encode domain/users
 ## or use prosodyctl to check if users exist (will complicate looping...)
+- name: Jicofo user
+  shell:
+    cmd: prosodyctl register {{ jicofo_user }} auth.{{ meet_domain }} {{ jicofo_pass }}
+    creates: /var/lib/prosody/auth%2e{{ meet_domain | replace(".","%2e") | replace("-","%2d") }}/accounts/{{ jicofo_user | replace(".","%2e") | replace("-","%2d") | replace("_","%5f") }}.dat
+
 - name: Videobridge users
   shell:
     cmd: prosodyctl register {{ hostvars[item].videobridge_user }} auth.{{ meet_domain }} {{ hostvars[item].videobridge_pass }}
