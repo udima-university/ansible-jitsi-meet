@@ -1,0 +1,11 @@
+---
+- name: Check user file contains password
+  command: grep -q "password" /var/lib/prosody/{{ xmpp_domain | replace(".","%2e") | replace("-","%2d") }}/accounts/{{ xmpp_user | replace(".","%2e") | replace("-","%2d") | replace("_","%5f") }}.dat
+  register: userfile
+  changed_when: no
+  ignore_errors: yes
+  
+- name: Create XMPP user
+  shell:
+    cmd: prosodyctl register {{ xmpp_user }} {{ xmpp_domain }} {{ xmpp_pass }}
+  when: userfile.failed
